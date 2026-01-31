@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Football",
+    "price": 25,
+    "image": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 2,
+    "name": "Running Shoes",
+    "price": 80,
+    "image": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 3,
+    "name": "Cricket Bat",
+    "price": 120,
+    "image": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 1769251548498,
+    "name": "yoga mat",
+    "price": "700",
+    "image": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 1769262313796,
+    "name": "badmition",
+    "price": "300",
+    "image": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 1769692379479,
+    "name": "123",
+    "price": "345",
+    "image": "https://store.cosco.in/cdn/shop/files/Striker-Bat-1_d0fa191f-774b-4c30-957e-e35fac5e6cd5.jpg?v=1731584078"
+  }
+]

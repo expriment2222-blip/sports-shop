@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin panel - sports shop</title>
+    <link rel="stylesheet1" href="stylesheet1.css">
+</head>
+<body>
+    
+    <h1>admin panel</h1>
+    <form id="productForm">
+        <input type="text" id="name" placeholder="product name" required>
+        <input type="number" id="price" placeholder="price" required>
+        <input type="text" id="image" placeholder="image URl">
+        <button type="submit">add product</button>
+    </form>
+    <script>
+document.getElementById("productForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const product = {
+    name: document.getElementById("name").value,
+    price: document.getElementById("price").value,
+    image: document.getElementById("image").value
+  };
+
+  fetch("http://localhost:3000/products", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(product)
+  })
+  .then(() => {
+    alert("Product added");
+    e.target.reset();
+  })
+  .catch(err => console.error(err));
+});
+</script>
+    <body class="admin-page"></body>
+    <div id="admin-product-list"></div>
+    <p id="message"></p>
+    <script src="admin.js"></script>
+</body>
+</html>

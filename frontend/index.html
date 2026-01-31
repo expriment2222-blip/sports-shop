@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sports Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="stylesheet.css">
+</head>
+
+<body>
+
+<header>
+  <h1>🏆 Baviskar Sports Shop</h1>
+  <button class="cart-btn" onclick="openCart()">🛒 Cart</button>
+</header>
+
+<div id="products"></div>
+
+<div id="cartBox">
+  <h2>Your Cart</h2>
+  <div id="cartItems"></div>
+  <p class="total" id="cartTotal"></p>
+
+  <input id="custName" placeholder="Customer Name">
+  <input id="custAddress" placeholder="Delivery Address">
+
+  <button class="add-btn" onclick="orderOnWhatsApp()">Order on WhatsApp</button>
+</div>
+
+<script>
+const API_URL = "http://localhost:3000/products";
+const PHONE = "917415147830"; // your WhatsApp number
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// LOAD PRODUCTS
+fetch(API_URL)
+  .then(res => res.json())
+  .then(products => {
+    const box = document.getElementById("products");
+    box.innerHTML = "";
+
+    products.forEach(p => {
+      box.innerHTML += `
+        <div class="product">
+          <img src="${p.image || 'https://via.placeholder.com/250'}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>Price: ₹${p.price}</p>
+          <button class="add-btn" onclick="addToCart('${p.name}', ${p.price})">
+            Add to Cart
+          </button>
+        </div>
+      `;
+    });
+  });
+
+// ADD TO CART
+function addToCart(name, price) {
+  const item = cart.find(i => i.name === name);
+  if (item) {
+    item.qty++;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
+  saveCart();
+  alert("Added to cart");
+}
+
+// SAVE CART
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// OPEN CART
+function openCart() {
+  document.getElementById("cartBox").style.display = "block";
+  renderCart();
+}
+
+// RENDER CART WITH QTY BUTTONS
+function renderCart() {
+  const itemsDiv = document.getElementById("cartItems");
+  const totalDiv = document.getElementById("cartTotal");
+  itemsDiv.innerHTML = "";
+
+  let total = 0;
+
+  if (cart.length === 0) {
+    itemsDiv.innerHTML = "<p>Cart is empty</p>";
+    totalDiv.innerText = "";
+    return;
+  }
+
+  cart.forEach((item, index) => {
+    total += item.price * item.qty;
+
+    itemsDiv.innerHTML += `
+      <div class="cart-item">
+        <span>${item.name} (₹${item.price})</span>
+
+        <div class="qty-controls">
+          <button onclick="changeQty(${index}, -1)">−</button>
+          <span> ${item.qty} </span>
+          <button onclick="changeQty(${index}, 1)">+</button>
+        </div>
+
+        <button class="remove" onclick="removeItem(${index})">X</button>
+      </div>
+    `;
+  });
+
+  totalDiv.innerText = `Total: ₹${total}`;
+}
+
+// CHANGE QUANTITY
+function changeQty(index, change) {
+  cart[index].qty += change;
+
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  }
+
+  saveCart();
+  renderCart();
+}
+
+// REMOVE ITEM
+function removeItem(index) {
+  cart.splice(index, 1);
+  saveCart();
+  renderCart();
+}
+
+// WHATSAPP ORDER
+function orderOnWhatsApp() {
+  const name = document.getElementById("custName").value.trim();
+  const address = document.getElementById("custAddress").value.trim();
+
+  if (!name || !address || cart.length === 0) {
+    alert("Fill all details and add items");
+    return;
+  }
+
+  let msg = `New Order\nCustomer: ${name}\nAddress: ${address}\n\nItems:\n`;
+  let total = 0;
+
+  cart.forEach(item => {
+    msg += `${item.name} × ${item.qty} = ₹${item.price * item.qty}\n`;
+    total += item.price * item.qty;
+  });
+
+  msg += `\nTotal: ₹${total}`;
+
+  window.open(
+    `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`,
+    "_blank"
+  );
+
+  cart = [];
+  localStorage.removeItem("cart");
+}
+</script>
+<h1>contact</h1>
+<h3>moible number=7415147830</h3>
+<h3>email=baviskar sports shop</h3>
+</body>
+</html>
