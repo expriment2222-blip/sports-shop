@@ -1,17 +1,26 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
 const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
-app.listen(PORT, ()=> {
-  console.log("Server running on port"+ PORT);
-});
-const DATA_FILE = "./products.json";
 
 app.use(cors());
 app.use(express.json());
 
+const FRONTEND_PATH = path.resolve(__dirname, "../frontend");
+
+app.use(express.static(FRONTEND_PATH));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(FRONTEND_PATH, "index.html"));
+});
+
+/* PORT FOR RENDER */
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 /* Helper: read products */
 function readProducts() {
   if (!fs.existsSync(DATA_FILE)) {
